@@ -26,6 +26,9 @@ fun f(): Unit {}
 
 
 
+
+
+
 // No empty class bodies.
 class E {}
 
