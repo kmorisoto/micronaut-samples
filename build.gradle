@@ -37,7 +37,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '1.0'
-
+    implementation 'org.apache.commons:commons-lang3:3.0'
+    implementation 'org.apache:apache:4'
 }
 
 mainClassName = "com.example.ApplicationKt"
