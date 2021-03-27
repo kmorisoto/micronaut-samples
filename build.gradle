@@ -34,6 +34,11 @@ dependencies {
     implementation("io.micronaut.xml:micronaut-jackson-xml")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '1.0'
+    implementation 'org.apache.commons:commons-lang3:3.0'
+    implementation 'org.apache:apache:4'
 }
 
 mainClassName = "com.example.ApplicationKt"
