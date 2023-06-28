@@ -5,7 +5,15 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.7.10"
     id("com.google.cloud.tools.jib") version "2.8.0"
+    id("de.undercouch.download") version "4.0.0"
 }
+
+ext {
+    datadogAgentUrl = 'https://dtdg.co/latest-java-tracer'
+    datadogDirectory = "${buildDir}/datadog"
+    datadogAgentFile = 'dd-java-agent.jar'
+}
+
 
 version = "0.1"
 group = "com.example"
@@ -47,13 +55,31 @@ tasks {
     }
     jib {
         from {
-            image = "amazoncorretto:17"
+            image = "openjdk:17"
         }
         to {
             image = "gcr.io/myapp/jib-image"
         }
+        extraDirectories {
+            paths {
+                path {
+                    from = file(datadogDirectory)
+                    into = '/java-agent'
+                }
+
+            }
+            permissions = [
+                    '/java-agent/**': '755'
+            ]
+        }
+        container {
+            jvmFlags = [
+                    '-javaagent:/java-agent/' + datadogAgentFile
+            ]
+        }
     }
 }
+
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
@@ -65,4 +91,8 @@ micronaut {
 }
 
 
-
+tasks.register('downloadAgent', Download) {
+    src datadogAgentUrl
+    dest datadogDirectory + '/' + datadogAgentFile
+}
+tasks.jibDockerBuild.dependsOn downloadAgent
